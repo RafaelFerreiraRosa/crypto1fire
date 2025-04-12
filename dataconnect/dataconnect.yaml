@@ -1,0 +1,12 @@
+specVersion: "v1"
+serviceId: "cursor"
+location: "us-central1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "fdcdb"
+      cloudSql:
+        instanceId: "cursor-fdc"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]
