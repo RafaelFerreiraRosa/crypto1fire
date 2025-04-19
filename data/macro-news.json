@@ -1,0 +1,87 @@
+[
+  {
+    "id": "news-1745098603919-china-expands-digita",
+    "title": "China expands Digital Yuan pilot to five more cities",
+    "source": "Reuters Crypto",
+    "sourceUrl": "https://www.reuters.com/business/future-of-money/",
+    "url": "https://www.reuters.com/business/future-of-money/china-expands-cbdc-pilot",
+    "content": "The People's Bank of China announced today the expansion of its digital currency (CBDC) pilot program to five more major cities, including Chongqing and Tianjin. With this expansion, the Digital Yuan will be available to over 500 million people. Chinese authorities stated that CBDC adoption is exceeding expectations, with over 120 million digital wallets already created. Experts see this expansion as part of China's strategy to reduce dependence on the US dollar and create an alternative payment system to SWIFT.",
+    "summary": "China expands Digital Yuan pilot to major cities. This news has significant geopolitical implications for the crypto market, with mixed impact.",
+    "timestamp": "2025-04-19T21:36:43.806Z",
+    "categories": [
+      "CBDC",
+      "regulation",
+      "geopolitics"
+    ],
+    "macroImpact": {
+      "description": "High impact related to geopolitics with mixed sentiment for the crypto market.",
+      "severity": "high",
+      "markets": [
+        "crypto",
+        "forex"
+      ],
+      "sentiment": "mixed"
+    },
+    "regulatoryImplications": {
+      "description": "Development of CBDCs by central banks modifying the competitive landscape for cryptocurrencies.",
+      "regions": [
+        "China",
+        "Global"
+      ],
+      "severity": "high"
+    },
+    "relatedAssets": [
+      "Digital Yuan",
+      "BTC",
+      "USDT"
+    ],
+    "marketCycle": {
+      "phase": "distribution",
+      "confidence": "medium",
+      "analysis": "The aggressive expansion of China's CBDC suggests growing competition for crypto in payments. For some assets like stablecoins, this could indicate a distribution phase as institutional actors reassess exposure."
+    },
+    "investmentSignal": {
+      "action": "research",
+      "strength": 6,
+      "timeframe": "long",
+      "reasoning": "The rise of CBDCs presents both challenges and opportunities for different crypto segments. Stablecoins may face headwinds, while scarce assets like Bitcoin could benefit from increased monetary competition."
+    }
+  },
+  {
+    "id": "news-1745094398829-bitcoin-surpasses--8",
+    "title": "Bitcoin surpasses $80,000 for the first time",
+    "source": "Wall Street Journal Crypto",
+    "sourceUrl": "https://www.wsj.com/news/types/cryptocurrency",
+    "url": "https://www.wsj.com/news/types/cryptocurrency/bitcoin-breaks-80k",
+    "content": "Bitcoin surpassed the $80,000 mark for the first time in history, reaching a new all-time high. The surge is attributed to the continuous flow of institutional capital into Bitcoin ETFs, which have accumulated over $25 billion in assets under management since their launch in January. 'The market is reacting to Bitcoin's legitimization as an institutional asset class,' stated Sarah Peterson, a strategist at Goldman Sachs. The price increase comes amid expectations of interest rate cuts by the Federal Reserve and concerns about inflation, reinforcing Bitcoin's narrative as a hedge against monetary devaluation.",
+    "summary": "Bitcoin reaches new all-time high above $80,000. This news has significant implications for market sentiment, with strongly positive impact.",
+    "timestamp": "2025-04-19T20:26:38.751Z",
+    "categories": [
+      "market-movement",
+      "price-action",
+      "institutional"
+    ],
+    "macroImpact": {
+      "description": "Medium impact related to market movements with positive sentiment for the crypto market.",
+      "severity": "medium",
+      "markets": [
+        "crypto"
+      ],
+      "sentiment": "positive"
+    },
+    "relatedAssets": [
+      "BTC"
+    ],
+    "marketCycle": {
+      "phase": "uptrend",
+      "confidence": "very-high",
+      "analysis": "New all-time highs combined with strong institutional inflows clearly indicate we're in a bull market uptrend phase. The momentum appears sustainable given the underlying fundamental drivers."
+    },
+    "investmentSignal": {
+      "action": "hold",
+      "strength": 7,
+      "timeframe": "medium",
+      "reasoning": "While the long-term outlook remains strongly bullish, assets reaching new ATHs often experience short-term consolidation. The ideal strategy is to maintain existing positions while preparing for potential volatility."
+    }
+  }
+]

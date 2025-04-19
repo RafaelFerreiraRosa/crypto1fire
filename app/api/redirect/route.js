@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as cheerio from 'cheerio';
 
 // Mapeamento para URLs específicos que sabemos que funcionam
-const KNOWN_URLS_MAP: Record<string, string> = {
+const KNOWN_URLS_MAP = {
   // CryptoPanic URLs para URLs reais (sem parâmetros de query)
   "https://cryptopanic.com/news/20999106/Breaking-Bitcoin-Soars-5-on-Tariff-Reversal": "https://u.today/breaking-bitcoin-soars-5-on-tariff-reversal",
   "https://cryptopanic.com/news/20999007/Trump-Puts-New-Tarrifs-on-China-125": "https://coinpaprika.com/news/trump-puts-new-tarrifs-on-china-125-/",
@@ -12,21 +11,11 @@ const KNOWN_URLS_MAP: Record<string, string> = {
   // Mais URLs baseadas nos logs
   "https://cryptopanic.com/news/20988705/Trump-linked-WLFI-dumps-Ethereum-at-55-loss-amid-crypto-market-turmoil": "https://cointrackdaily.com/trump-linked-wlfi-dumps-ethereum-at-55-loss-amid-crypto-market-turmoil/",
   "https://cryptopanic.com/news/20988010/Ethereum-ETH-Whales-Capitulate-Is-It-Over": "https://u.today/ethereum-eth-whales-capitulate-is-it-over",
-  "https://cryptopanic.com/news/20988043/Ethereum-in-great-difficulty-ETH-has-outperformed-Bitcoin-only-15-of-the-time": "https://en.cryptonomist.ch/ethereum-in-great-difficulty-eth-has-outperformed-bitcoin-only-15-of-the-time/",
-  "https://cryptopanic.com/news/20971660/Bitcoin-drops-below-77K-as-US-confirms-104-tariffs-on-China": "https://cryptobriefing.com/news/bitcoin-drops-below-77k-as-us-confirms-104-tariffs-on-china/",
-  "https://cryptopanic.com/news/20964396/XRP-Will-Overtake-Ethereum-By-2028-Standard-Chartered": "https://feeds2.benzinga.com/xrp-will-overtake-ethereum-by-2028-standard-chartered/",
-  "https://cryptopanic.com/news/20957348/MegaETH-Supercharging-Ethereum-for-the-Real-Time-Internet-Era": "https://coinpaprika.com/news/megaeth-supercharging-ethereum-for-the-real-time-internet-era/",
-  "https://cryptopanic.com/news/20956948/Trump-escalates-trade-war-BTC-at-80k": "https://coinpaprika.com/news/trump-escalates-trade-war-btc-at-80k/",
-  "https://cryptopanic.com/news/20954761/ETH-Drops-to-2-Year-Lows-Amid-Crypto-Selloff": "https://bankless.com/blog/eth-drops-to-2-year-lows-amid-crypto-selloff/",
-  "https://cryptopanic.com/news/20952800/Ethereum-Whales-Scoop-Up-60M-as-ETH-Price-Tumbles-to-2023-Lows": "https://cryptopotato.com/ethereum-whales-scoop-up-60m-as-eth-price-tumbles-to-2023-lows/",
-  "https://cryptopanic.com/news/20943186/Markets-are-crashing-Bitcoin-at-75k": "https://coinpaprika.com/news/markets-are-crashing-bitcoin-at-75k/",
-  "https://cryptopanic.com/news/20940044/Breaking-Crypto-Market-Getting-Annihilated-as-Ethereum-Collapses-by-10": "https://u.today/breaking-crypto-market-getting-annihilated-as-ethereum-collapses-by-10",
-  "https://cryptopanic.com/news/20938494/PayPal-Adds-Solana-and-Chainlink-to-its-Crypto-Services": "https://spaziocrypto.com/paypal-adds-solana-and-chainlink-to-its-crypto-services/",
-  "https://cryptopanic.com/news/20937139/Era-of-US-Treasuries-and-Stocks-As-Global-Reserve-Assets-Now-Over-As-Gold-and-Bitcoin-Take-Over-Arthur-Hayes": "https://dailyhodl.com/2025/04/06/era-of-us-treasuries-and-stocks-as-global-reserve-assets-now-over-as-gold-and-bitcoin-take-over-arthur-hayes/"
+  "https://cryptopanic.com/news/20988043/Ethereum-in-great-difficulty-ETH-has-outperformed-Bitcoin-only-15-of-the-time": "https://en.cryptonomist.ch/ethereum-in-great-difficulty-eth-has-outperformed-bitcoin-only-15-of-the-time/"
 };
 
 // Mapeamento de domínios para seus respectivos formatos de URL
-const DOMAIN_URL_FORMATS: Record<string, string> = {
+const DOMAIN_URL_FORMATS = {
   'u.today': 'https://u.today/{slug}',
   'coinpaprika.com': 'https://coinpaprika.com/news/{slug}/',
   'thedefiant.io': 'https://thedefiant.io/news/regulation/{slug}',
@@ -37,7 +26,7 @@ const DOMAIN_URL_FORMATS: Record<string, string> = {
   'cointelegraph.com': 'https://cointelegraph.com/news/{slug}'
 };
 
-export async function GET(request: NextRequest) {
+export async function GET(request) {
   // Obtém a URL para onde redirecionar a partir dos parâmetros da consulta
   const searchParams = request.nextUrl.searchParams;
   const url = searchParams.get('url');
@@ -84,77 +73,7 @@ export async function GET(request: NextRequest) {
     const newsData = await apiResponse.json();
     console.log(`Dados da notícia obtidos: title=${newsData.title}, domain=${newsData.domain}`);
     
-    // Como a API não fornece a URL original da notícia diretamente, vamos acessar a página da notícia no CryptoPanic
-    // E extrair a URL original da notícia usando seletores específicos
-    console.log("Acessando página da notícia no CryptoPanic para encontrar URL original...");
-    const detailPageUrl = `${cleanUrl}?ref=share`;
-    
-    const pageResponse = await fetch(detailPageUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
-      }
-    });
-    
-    if (!pageResponse.ok) {
-      throw new Error(`Erro ao acessar página de detalhes: ${pageResponse.status}`);
-    }
-    
-    const html = await pageResponse.text();
-    const $ = cheerio.load(html);
-    
-    // Estratégia específica do CryptoPanic: buscar pelo <span class="icon icon-link-external"></span>
-    // Este é o método exato que o site usa para seus links externos
-    const externalIconSpans = $('span.icon.icon-link-external');
-    if (externalIconSpans.length > 0) {
-      // Obter o elemento pai (a tag) que contém o ícone
-      const parentLink = externalIconSpans.first().parent('a');
-      if (parentLink.length > 0) {
-        const externalUrl = parentLink.attr('href');
-        if (externalUrl) {
-          console.log(`URL encontrada via ícone externo (método CryptoPanic): ${externalUrl}`);
-          return NextResponse.redirect(externalUrl);
-        }
-      }
-    }
-    
-    // Estratégia 1: Verificar o meta tag com property="og:see_also"
-    const metaUrl = $('meta[property="og:see_also"]').attr('content');
-    if (metaUrl) {
-      console.log(`URL encontrada no meta tag: ${metaUrl}`);
-      return NextResponse.redirect(metaUrl);
-    }
-    
-    // Estratégia 2: Buscar pela classe link-detail-source
-    let sourceUrl = $('.link-detail-source').attr('href');
-    if (sourceUrl) {
-      console.log(`URL encontrada no link-detail-source: ${sourceUrl}`);
-      return NextResponse.redirect(sourceUrl);
-    }
-    
-    // Estratégia 3: Buscar pelo link com ícone externo (abordagem alternativa)
-    const externalLinks = $('a').filter(function() {
-      return $(this).find('.icon-link-external').length > 0;
-    });
-    
-    if (externalLinks.length > 0) {
-      sourceUrl = externalLinks.first().attr('href');
-      if (sourceUrl) {
-        console.log(`URL encontrada com ícone externo: ${sourceUrl}`);
-        return NextResponse.redirect(sourceUrl);
-      }
-    }
-    
-    // Estratégia 4: Buscar pelo botão "Read on..." ou "Ver mais"
-    const readOnButtons = $('a.btn-block.btn-sm.btn-info, a.read-on-btn');
-    if (readOnButtons.length > 0) {
-      sourceUrl = readOnButtons.first().attr('href');
-      if (sourceUrl) {
-        console.log(`URL encontrada no botão "Read on": ${sourceUrl}`);
-        return NextResponse.redirect(sourceUrl);
-      }
-    }
-    
-    // Estratégia 5: Construir URL com base no domínio e slug
+    // Estratégia simplificada: Construir URL com base no domínio e slug
     if (newsData.domain && newsData.slug) {
       // Construir URL com base no domínio
       let constructedUrl = "";
@@ -219,8 +138,8 @@ export async function GET(request: NextRequest) {
     }
     
     // Último recurso: Redirecionar para a página original do CryptoPanic
-    console.log(`Nenhuma URL encontrada, redirecionando para a página original: ${detailPageUrl}`);
-    return NextResponse.redirect(detailPageUrl);
+    console.log(`Nenhuma URL encontrada, redirecionando para a página original: ${cleanUrl}`);
+    return NextResponse.redirect(cleanUrl);
     
   } catch (error) {
     console.error('Erro ao processar redirecionamento:', error);

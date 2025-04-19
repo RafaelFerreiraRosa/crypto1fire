@@ -1,0 +1,34 @@
+[
+  {
+    "sentimento_geral": "bullish",
+    "sinais_macro": "Expectativa de corte de juros pelo FED impulsiona ativos de risco.",
+    "narrativas_emergentes": [
+      "AI",
+      "Layer 2",
+      "DePIN",
+      "Memecoins",
+      "Zero Knowledge"
+    ],
+    "tokens_mencionados": [
+      "BTC",
+      "ETH",
+      "SOL"
+    ],
+    "fase_ciclo_mercado": "distribuição",
+    "justificativa": "Os tweets analisados demonstram uma perspectiva predominantemente positiva para o mercado. Os dados apontam para uma fase de distribuição, onde investidores iniciais podem estar realizando lucros. As narrativas de AI, Layer 2, DePIN, Memecoins, Zero Knowledge estão ganhando destaque entre os influenciadores e analistas. Pontos-chave mencionados incluem: FED mantém juros estáveis; Inflação nos EUA em queda; Dados de emprego melhores que o esperado. Análise baseada em tweets de @100trillionUSD, @krugermacro, @LynAldenContact e outros. Esta análise é baseada em menções recentes de influenciadores e especialistas do mercado cripto, com foco em fatores macroeconômicos e tendências emergentes.",
+    "timestamp": "2025-04-18T23:57:45.262Z",
+    "influenciadores_chave": [
+      "@100trillionUSD",
+      "@krugermacro",
+      "@LynAldenContact",
+      "@scottmelker",
+      "@CryptoHayes",
+      "@MustStopMurad",
+      "@zhusu",
+      "@danheld",
+      "@Ashcryptoreal",
+      "@udiWertheimer"
+    ],
+    "id": "macro-1745020665337"
+  }
+]

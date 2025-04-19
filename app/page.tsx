@@ -7,10 +7,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getTopCryptos, getGlobalMetrics, CryptoData } from "@/lib/coinapi";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, DollarSign, TrendingUp, BarChart3, ArrowUpDown } from "lucide-react";
+import { Moon, Sun, DollarSign, TrendingUp, BarChart3, ArrowUpDown, LineChart } from "lucide-react";
 import Image from "next/image";
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 import Link from "next/link";
+import MacroX from "@/components/agents/MacroX";
+import MacroN from "@/components/agents/MacroN";
+import MacroY from "@/components/agents/MacroY";
+import Macro from "@/components/agents/Macro";
 
 type SortConfig = {
   key: 'price_usd' | 'percent_change_24h' | 'volume_1day_usd' | null;
@@ -177,10 +181,10 @@ export default function Home() {
         <div className="flex items-center gap-4">
           <h1 className="text-3xl font-bold">Home</h1>
           <Link 
-            href="/analyses" 
+            href="/report" 
             className="text-lg font-medium hover:text-primary transition-colors"
           >
-            Análises
+            Report
           </Link>
         </div>
         <div className="flex items-center gap-4">
@@ -268,13 +272,12 @@ export default function Home() {
       </div>
 
       <div className="flex gap-4">
-        <Tabs defaultValue="all" className="space-y-4 flex-1">
-          <TabsList className="bg-background/50">
-            <TabsTrigger value="all">Todas</TabsTrigger>
-            <TabsTrigger value="gainers">Ganhadores</TabsTrigger>
-            <TabsTrigger value="losers">Perdedores</TabsTrigger>
+        <Tabs defaultValue="market" className="pt-6">
+          <TabsList className="mb-4">
+            <TabsTrigger value="market">Mercado</TabsTrigger>
+            <TabsTrigger value="agents">Agentes</TabsTrigger>
           </TabsList>
-          <TabsContent value="all" className="space-y-4">
+          <TabsContent value="market" className="space-y-4">
             <Card className="bg-background/50">
               <CardHeader>
                 <CardTitle>Principais Criptomoedas</CardTitle>
@@ -342,244 +345,31 @@ export default function Home() {
               </CardContent>
             </Card>
           </TabsContent>
-          <TabsContent value="gainers" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Maiores Altas em 24h</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="text-base">Moeda</TableHead>
-                      <TableHead className="text-base">Preço</TableHead>
-                      <TableHead className="text-base">Variação 24h</TableHead>
-                      <TableHead className="text-base">Volume 24h</TableHead>
-                      <TableHead className="text-base">Últimas 24h</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {[...cryptoData]
-                      .filter(crypto => !isNaN(crypto.percent_change_24h))
-                      .sort((a, b) => {
-                        if (!a.percent_change_24h) return 1;
-                        if (!b.percent_change_24h) return -1;
-                        return b.percent_change_24h - a.percent_change_24h;
-                      })
-                      .slice(0, 5)
-                      .map((crypto, index) => (
-                        <TableRow key={`gainers-${crypto.asset_id}-${index}`}>
-                          <TableCell className="font-medium">
-                            <div className="flex items-center gap-2">
-                              <span>{crypto.asset_id}</span>
-                              <span className="text-muted-foreground">{crypto.name}</span>
-                            </div>
-                          </TableCell>
-                          <TableCell>{formatCurrency(crypto.price_usd)}</TableCell>
-                          <TableCell className="text-green-500 font-semibold">
-                            +{crypto.percent_change_24h.toFixed(2)}%
-                          </TableCell>
-                          <TableCell>{formatLargeNumber(crypto.volume_1day_usd)}</TableCell>
-                          <TableCell>
-                            <div className="w-[100px] h-[40px]">
-                              <Sparklines data={crypto.sparkline_data} width={100} height={40}>
-                                <SparklinesLine 
-                                  color="#22c55e"
-                                  style={{ fill: "none" }}
-                                />
-                              </Sparklines>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+          <TabsContent value="agents" className="space-y-8">
+            <h2 className="text-2xl font-semibold mb-4">Agentes de Análise Macro</h2>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+              <div className="lg:col-span-4">
+                <Macro />
+              </div>
+            </div>
+            
+            <h2 className="text-2xl font-semibold mb-4">Agentes Individuais</h2>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="lg:col-span-1">
+                <MacroX />
+              </div>
+              <div className="lg:col-span-1">
+                <MacroN />
+              </div>
+              <div className="lg:col-span-1">
+                <MacroY />
+              </div>
+            </div>
           </TabsContent>
         </Tabs>
-
-        <Tabs defaultValue="defi" className="space-y-4 flex-1">
-          <TabsList className="bg-background/50">
-            <TabsTrigger value="defi">DeFi 🔥</TabsTrigger>
-            <TabsTrigger value="gaming">Gaming 🔥</TabsTrigger>
-            <TabsTrigger value="layer2">Layer 2 🔥</TabsTrigger>
-            <TabsTrigger value="ai">AI 🔥</TabsTrigger>
-          </TabsList>
-          <TabsContent value="defi" className="space-y-4">
-            <Card className="bg-background/50">
-              <CardHeader>
-                <CardTitle>DeFi - Finanças Descentralizadas</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader className="bg-muted/20">
-                    <TableRow>
-                      <TableHead className="text-base">Moeda</TableHead>
-                      <TableHead className="text-base">Preço</TableHead>
-                      <TableHead className="text-base">Variação 24h</TableHead>
-                      <TableHead className="text-base">Volume 24h</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {[...cryptoData]
-                      .filter(crypto => {
-                        const defiTokens = ['UNI', 'AAVE', 'MKR', 'COMP', 'SNX', 'CAKE', 'CRV', 'SUSHI', '1INCH', 'YFI'];
-                        return defiTokens.includes(crypto.asset_id);
-                      })
-                      .sort((a, b) => b.percent_change_24h - a.percent_change_24h)
-                      .slice(0, 5)
-                      .map((crypto, index) => (
-                        <TableRow key={`defi-${crypto.asset_id}-${index}`}>
-                          <TableCell className="font-medium">
-                            <div className="flex items-center gap-2">
-                              <span>{crypto.asset_id}</span>
-                              <span className="text-muted-foreground">{crypto.name}</span>
-                            </div>
-                          </TableCell>
-                          <TableCell>{formatCurrency(crypto.price_usd)}</TableCell>
-                          <TableCell className={crypto.percent_change_24h >= 0 ? 'text-green-500' : 'text-red-500'}>
-                            {crypto.percent_change_24h.toFixed(2)}%
-                          </TableCell>
-                          <TableCell>{formatLargeNumber(crypto.volume_1day_usd)}</TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="gaming" className="space-y-4">
-            <Card className="bg-background/50">
-              <CardHeader>
-                <CardTitle>Gaming e Metaverso</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader className="bg-muted/20">
-                    <TableRow>
-                      <TableHead className="text-base">Moeda</TableHead>
-                      <TableHead className="text-base">Preço</TableHead>
-                      <TableHead className="text-base">Variação 24h</TableHead>
-                      <TableHead className="text-base">Volume 24h</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {[...cryptoData]
-                      .filter(crypto => {
-                        const gamingTokens = ['AXS', 'SAND', 'MANA', 'ENJ', 'GALA', 'ILV', 'IMX', 'MAGIC', 'WEMIX', 'ULTRA'];
-                        return gamingTokens.includes(crypto.asset_id);
-                      })
-                      .sort((a, b) => b.percent_change_24h - a.percent_change_24h)
-                      .slice(0, 5)
-                      .map((crypto, index) => (
-                        <TableRow key={`gaming-${crypto.asset_id}-${index}`}>
-                          <TableCell className="font-medium">
-                            <div className="flex items-center gap-2">
-                              <span>{crypto.asset_id}</span>
-                              <span className="text-muted-foreground">{crypto.name}</span>
-                            </div>
-                          </TableCell>
-                          <TableCell>{formatCurrency(crypto.price_usd)}</TableCell>
-                          <TableCell className={crypto.percent_change_24h >= 0 ? 'text-green-500' : 'text-red-500'}>
-                            {crypto.percent_change_24h.toFixed(2)}%
-                          </TableCell>
-                          <TableCell>{formatLargeNumber(crypto.volume_1day_usd)}</TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="layer2" className="space-y-4">
-            <Card className="bg-background/50">
-              <CardHeader>
-                <CardTitle>Layer 2 - Escalabilidade</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader className="bg-muted/20">
-                    <TableRow>
-                      <TableHead className="text-base">Moeda</TableHead>
-                      <TableHead className="text-base">Preço</TableHead>
-                      <TableHead className="text-base">Variação 24h</TableHead>
-                      <TableHead className="text-base">Volume 24h</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {[...cryptoData]
-                      .filter(crypto => {
-                        const layer2Tokens = ['MATIC', 'ARB', 'OP', 'IMX', 'METIS', 'ZKS', 'DYDX', 'LRC', 'BOBA', 'RSK'];
-                        return layer2Tokens.includes(crypto.asset_id);
-                      })
-                      .sort((a, b) => b.percent_change_24h - a.percent_change_24h)
-                      .slice(0, 5)
-                      .map((crypto, index) => (
-                        <TableRow key={`layer2-${crypto.asset_id}-${index}`}>
-                          <TableCell className="font-medium">
-                            <div className="flex items-center gap-2">
-                              <span>{crypto.asset_id}</span>
-                              <span className="text-muted-foreground">{crypto.name}</span>
-                            </div>
-                          </TableCell>
-                          <TableCell>{formatCurrency(crypto.price_usd)}</TableCell>
-                          <TableCell className={crypto.percent_change_24h >= 0 ? 'text-green-500' : 'text-red-500'}>
-                            {crypto.percent_change_24h.toFixed(2)}%
-                          </TableCell>
-                          <TableCell>{formatLargeNumber(crypto.volume_1day_usd)}</TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="ai" className="space-y-4">
-            <Card className="bg-background/50">
-              <CardHeader>
-                <CardTitle>Inteligência Artificial</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader className="bg-muted/20">
-                    <TableRow>
-                      <TableHead className="text-base">Moeda</TableHead>
-                      <TableHead className="text-base">Preço</TableHead>
-                      <TableHead className="text-base">Variação 24h</TableHead>
-                      <TableHead className="text-base">Volume 24h</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {[...cryptoData]
-                      .filter(crypto => {
-                        const aiTokens = ['FET', 'OCEAN', 'AGIX', 'NMR', 'RLC', 'GRT', 'RNDR', 'ALI', 'RAI', 'BOTTO'];
-                        return aiTokens.includes(crypto.asset_id);
-                      })
-                      .sort((a, b) => b.percent_change_24h - a.percent_change_24h)
-                      .slice(0, 5)
-                      .map((crypto, index) => (
-                        <TableRow key={`ai-${crypto.asset_id}-${index}`}>
-                          <TableCell className="font-medium">
-                            <div className="flex items-center gap-2">
-                              <span>{crypto.asset_id}</span>
-                              <span className="text-muted-foreground">{crypto.name}</span>
-                            </div>
-                          </TableCell>
-                          <TableCell>{formatCurrency(crypto.price_usd)}</TableCell>
-                          <TableCell className={crypto.percent_change_24h >= 0 ? 'text-green-500' : 'text-red-500'}>
-                            {crypto.percent_change_24h.toFixed(2)}%
-                          </TableCell>
-                          <TableCell>{formatLargeNumber(crypto.volume_1day_usd)}</TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-    </div>
+      </div>
     </main>
   );
 }

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "tweet-8",
+    "protocolo": "Aave",
+    "blockchain": "Ethereum",
+    "metrica_onchain": "Empréstimos totais caíram 30% após aumento das taxas de juros",
+    "narrativa": [
+      "DeFi",
+      "Lending"
+    ],
+    "sentimento": "bearish",
+    "autor": "@DeFiMoon",
+    "data": "2025-04-12T21:36:48.507Z",
+    "engajamento": {
+      "likes": 987,
+      "retweets": 176,
+      "comentarios": 89
+    },
+    "fonte": "https://twitter.com/DeFiMoon/status/1234567897",
+    "texto": "Aave has seen a 30% drop in total borrows following the recent interest rate hikes. The lending market is cooling off significantly as users seek alternatives or exit leveraged positions. This could impact protocol revenues in the short term. $AAVE"
+  },
+  {
+    "id": "tweet-10",
+    "protocolo": "Sui",
+    "blockchain": "Sui",
+    "metrica_onchain": "Endereços ativos diários em queda de 40% no último mês",
+    "narrativa": [
+      "Layer 1",
+      "Move Ecosystem"
+    ],
+    "sentimento": "bearish",
+    "autor": "@intotheblock",
+    "data": "2025-04-10T21:36:48.507Z",
+    "engajamento": {
+      "likes": 1354,
+      "retweets": 287,
+      "comentarios": 118
+    },
+    "fonte": "https://twitter.com/intotheblock/status/1234567899",
+    "texto": "Sui daily active addresses have dropped by 40% over the past month. On-chain activity is showing a concerning downtrend after the initial hype has subsided. The network needs to attract more sustainable use cases. $SUI"
+  }
+]

@@ -14,6 +14,7 @@ interface Narrative {
   risks: {
     primary: string;
     details: string;
+    impact: string;
   };
 }
 
@@ -27,7 +28,8 @@ export default function TrendsGrid() {
       tokens: ["HNT", "MOBILE", "RNDR", "FIL"],
       risks: {
         primary: "Adoção inicial limitada",
-        details: "Infraestrutura física necessária pode atrasar crescimento"
+        details: "Infraestrutura física necessária pode atrasar crescimento",
+        impact: "Alto impacto no curto prazo"
       }
     },
     {
@@ -38,7 +40,8 @@ export default function TrendsGrid() {
       tokens: ["MINA", "ZKS", "STARK", "IMX"],
       risks: {
         primary: "Complexidade técnica",
-        details: "Dificuldade de auditoria e validação dos sistemas"
+        details: "Dificuldade de auditoria e validação dos sistemas",
+        impact: "Impacto moderado na adoção"
       }
     },
     {
@@ -49,7 +52,8 @@ export default function TrendsGrid() {
       tokens: ["MKR", "RNDR", "UNI", "AAVE"],
       risks: {
         primary: "Regulamentação incerta",
-        details: "Possíveis restrições governamentais em múltiplas jurisdições"
+        details: "Possíveis restrições governamentais em múltiplas jurisdições",
+        impact: "Alto impacto no médio prazo"
       }
     },
     {
@@ -60,7 +64,8 @@ export default function TrendsGrid() {
       tokens: ["STX", "ORDI", "RATS", "SATS"],
       risks: {
         primary: "Alta volatilidade",
-        details: "Dependência direta das flutuações do Bitcoin"
+        details: "Dependência direta das flutuações do Bitcoin",
+        impact: "Impacto contínuo no mercado"
       }
     },
     {
@@ -71,7 +76,8 @@ export default function TrendsGrid() {
       tokens: ["AGIX", "FET", "OCEAN", "GRT"],
       risks: {
         primary: "Hype excessivo",
-        details: "Possível bolha especulativa no setor de IA"
+        details: "Possível bolha especulativa no setor de IA",
+        impact: "Impacto severo em caso de correção"
       }
     }
   ]);
@@ -134,13 +140,22 @@ export default function TrendsGrid() {
               <TableRow key={narrative.name}>
                 <TableCell className="font-medium">{narrative.name}</TableCell>
                 <TableCell>{getSocialVolumeCategory(narrative.socialVolume)}</TableCell>
-                <TableCell>{formatVolume(narrative.financialVolume)}</TableCell>
-                <TableCell>{narrative.influencers} ativos</TableCell>
-                <TableCell>{narrative.tokens.join(", ")}</TableCell>
+                <TableCell className="text-center">{formatVolume(narrative.financialVolume)}</TableCell>
+                <TableCell>{narrative.influencers}</TableCell>
                 <TableCell>
-                  <div className="text-red-500">
+                  <div className="flex flex-wrap gap-2">
+                    {narrative.tokens.map((token, index) => (
+                      <span key={index} className="px-2 py-1 bg-secondary text-secondary-foreground rounded-full text-sm font-medium">
+                        {token}
+                      </span>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="text-red-500 text-[13px]">
                     <div>{narrative.risks.primary}</div>
-                    <div className="text-sm mt-1">{narrative.risks.details}</div>
+                    <div className="mt-1">{narrative.risks.details}</div>
+                    <div className="mt-1 text-orange-500">{narrative.risks.impact}</div>
                   </div>
                 </TableCell>
               </TableRow>
